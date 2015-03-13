@@ -1,4 +1,3 @@
-console.log("hwaet");
 var gridster;
 var scout_cal_html = '<iframe src="https://www.google.com/calendar/embed?title=scout%20calendar&amp;showTitle=0&amp;showPrint=0&amp;showTabs=0&amp;mode=WEEK&amp;height=250&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=pcrane%40goscoutgo.com&amp;color=%23B1440E&amp;src=talentdrive.com_f6tpmp29u1k06fm90jio0p0r40%40group.calendar.google.com&amp;color=%23333333&amp;ctz=America%2FNew_York" style=" border-width:0 " width="600" height="250" frameborder="0" scrolling="no"></iframe>';
 var header_html = "<header>|||</header>";
@@ -49,8 +48,9 @@ $(function(){
     gridster = $(".gridster > ul").gridster({
         widget_margins: [2, 2],
         widget_base_dimensions: [600, 260],
-        max_cols: 7,
-        extra_rows: 3,
+        max_cols: 3,
+        max_cols: 3,
+        extra_rows: 1,
         draggable: {
             handle: 'header'
         }
