@@ -1,5 +1,5 @@
 var gridster;
-var scout_cal_html = '<iframe src="https://www.google.com/calendar/embed?title=scout%20calendar&amp;showTitle=0&amp;showPrint=0&amp;showTabs=0&amp;mode=WEEK&amp;height=250&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=pcrane%40goscoutgo.com&amp;color=%23B1440E&amp;src=talentdrive.com_f6tpmp29u1k06fm90jio0p0r40%40group.calendar.google.com&amp;color=%23333333&amp;ctz=America%2FNew_York" style=" border-width:0 " width="600" height="250" frameborder="0" scrolling="no"></iframe>';
+var scout_cal_html = '<iframe src="https://www.google.com/calendar/embed?title=scout%20calendar&amp;showTitle=0&amp;showPrint=0&amp;showTabs=0&amp;mode=WEEK&amp;height=250&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=pcrane%40goscoutgo.com&amp;color=%23B1440E&amp;src=talentdrive.com_f6tpmp29u1k06fm90jio0p0r40%40group.calendar.google.com&amp;color=%23333333&amp;ctz=America%2FNew_York" style=" border-width:0 " width="450" height="220" frameborder="0" scrolling="no"></iframe>';
 var header_html = "<header>|||</header>";
 var bitcoin_html = '<div>USD/BTC price: <span data-btc-price="1.0">1.0 BTC</span></div>';
 var gmail_html = '<div id="gmail_content"><button id="authorize-button" style="visibility: hidden">Authorize</button><div id="gmail_data_anchor"></div></div>';
@@ -138,9 +138,8 @@ function bitcoin_price() {
 $(function(){
     gridster = $(".gridster > ul").gridster({
         widget_margins: [2, 2],
-        widget_base_dimensions: [600, 260],
-        max_cols: 3,
-        max_cols: 3,
+        widget_base_dimensions: [450, 250],
+        max_cols: 10,
         extra_rows: 1,
         draggable: {
             handle: 'header'
