@@ -9,6 +9,9 @@ var gmail_widgets = [
     {
         user_id: "trigunshin@gmail.com",
         widget_num: 1
+    },{
+        user_id: "patrickryancrane@gmail.com",
+        widget_num: 2
     }
 ];
 
@@ -46,7 +49,7 @@ function post_gmail_auth(widget_data, result, err) {
 
     var widget_num = widget_data.widget_num;
     var user_id = widget_data.user_id;
-    console.log('result', result);
+
     var result_size = 0;
     if(result) result_size = result.resultSizeEstimate;
     var result_messages = [];
