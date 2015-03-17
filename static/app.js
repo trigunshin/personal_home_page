@@ -1,11 +1,21 @@
 var gridster;
 var scout_cal_html = '<iframe src="https://www.google.com/calendar/embed?title=scout%20calendar&amp;showTitle=0&amp;showPrint=0&amp;showTabs=0&amp;mode=WEEK&amp;height=250&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=pcrane%40goscoutgo.com&amp;color=%23B1440E&amp;src=talentdrive.com_f6tpmp29u1k06fm90jio0p0r40%40group.calendar.google.com&amp;color=%23333333&amp;ctz=America%2FNew_York" style=" border-width:0 " width="450" height="220" frameborder="0" scrolling="no"></iframe>';
-var stock_data_html = '<div id="stock_data_anchor"></div>';
-var gmail_html = '<div id="gmail_content"><button id="authorize-button" style="visibility: hidden">Authorize</button><div id="gmail_data_anchor"></div></div>';
+var stock_widget_html = '<div id="stock_data_anchor"></div>';
+var gmail_widget_html = '<div id="gmail_content"><button id="authorize-button" style="visibility: hidden">Authorize</button><div id="gmail_data_anchor_<%= data.widget_num %>"></div></div>';
 
 var clientId = '155830396465-td1o0sadjfr0mcg5ppl4jfb6tovqbl4d.apps.googleusercontent.com';
 var scopes = "https://mail.google.com/ https://www.googleapis.com/auth/gmail.modify  https://www.googleapis.com/auth/gmail.readonly";
+var gmail_widgets = [
+    {
+        user_id: "trigunshin@gmail.com",
+        widget_num: 1
+    }, {
+        user_id: 'pcrane@goscoutgo.com',
+        widget_num: 2
+    }
+];
 
+//////////// gmail scripting
 function handleClientLoad() {
     window.setTimeout(checkAuth,1);
 }
@@ -15,11 +25,13 @@ function checkAuth() {
 }
 
 function handleAuthResult(authResult) {
-    var user_id = "trigunshin@gmail.com";
     var authorizeButton = document.getElementById('authorize-button');
     if (authResult && !authResult.error) {
         authorizeButton.style.visibility = 'hidden';
-        fetch_unread_email_data(user_id, post_gmail_auth);
+
+        _.each(gmail_widgets, function(gmail_widget) {
+            fetch_unread_email_data(gmail_widget, post_gmail_auth);
+        });
     } else {
         authorizeButton.style.visibility = '';
         authorizeButton.onclick = handleAuthClick;
@@ -32,40 +44,41 @@ function handleAuthClick(event) {
     return false;
 }
 
-function post_gmail_auth(user_id, result, err) {
+function post_gmail_auth(widget_data, user_id, result, err) {
     if(err) return console.log('Error: ' + err.message);
+    var widget_num = widget_data.widget_num;
 
     var gmail_template = $('script#gmail_template').html();
     var compiled_template = _.template(gmail_template);
-    var data = {count: result.resultSizeEstimate};
+    var data = {
+        count: result.resultSizeEstimate,
+        widget_num: widget_num
+    };
 
     var template_data = compiled_template({data: data});
-    $("div#gmail_data_anchor").append(template_data);
-
-    //$('#content').empty();
-    //$('#content').append("unread messages:" + result.resultSizeEstimate);
+    $("div#gmail_data_anchor_"+widget_num).append(template_data);
 
     _.each(result.messages, function(msg) {
         fetch_gmail_email(user_id, msg.id, function(mail, err) {
             if(err) return console.log('Error: ' + err.message);
-            $('#gmail_table_data_anchor').append("<tr><td>"+mail.subject+"</td></tr>");
+            $('#gmail_table_data_anchor_' + widget_num).append("<tr><td>"+mail.subject+"</td></tr>");
         })
     });
 }
 
 // Load the API and make an API call.  Display the results on the screen.
-function fetch_unread_email_data(user_id, cb) {
+function fetch_unread_email_data(widget_data, cb) {
     gapi.client.load('gmail', 'v1').then(function() {
         var request = gapi.client.gmail.users.messages.list({
-            'userId': user_id,
+            'userId': widget_data.user_id,
             'includeSpamTrash': false,
             'q': 'label:unread label:inbox'
         });
         request.then(function(resp) {
             var result = resp.result;
-            cb(user_id, result, null);
+            cb(widget_data, result, null);
         }, function(reason) {
-            cb(user_id, null, reason.result.error);
+            cb(widget_data, null, reason.result.error);
         });
     });
 }
@@ -87,7 +100,6 @@ function fetch_gmail_email(user_id, id, cb) {
         cb(null, reason.result.error);
     });
 }
-
 ////////// end gmail
 
 function bitcoin_price() {
@@ -151,6 +163,12 @@ function wrap_with_header(title, html) {
 function wrap_with_li(html) {
     return "<li>" + html + "</li>";
 }
+function get_gmail_widget(data) {
+    var compiled_template = _.template(gmail_widget_html);
+    var template_data = compiled_template({data: data});
+
+    return [wrap_with_li(wrap_with_header(data.user_id, template_data)), 2, 1]
+}
 $(function(){
     gridster = $(".gridster > ul").gridster({
         widget_margins: [2, 2],
@@ -163,10 +181,12 @@ $(function(){
     }).data('gridster');
 
     var widgets = [
-        [wrap_with_li(wrap_with_header("Ticker Data", stock_data_html)), 1, 1],
-        [wrap_with_li(wrap_with_header("Scout Calendar", scout_cal_html)), 1, 1],
-        [wrap_with_li(wrap_with_header("Gmail", gmail_html)), 2, 1]
+        [wrap_with_li(wrap_with_header("Ticker Data", stock_widget_html)), 1, 1],
+        [wrap_with_li(wrap_with_header("Scout Calendar", scout_cal_html)), 1, 1]
     ];
+    _.each(gmail_widgets, function(gmail_widget) {
+        widgets.push(get_gmail_widget(gmail_widget));
+    })
     $.each(widgets, function(i, widget){
         gridster.add_widget.apply(gridster, widget)
     });
