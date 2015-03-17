@@ -134,12 +134,27 @@ function bitcoin_price() {
         priceOrignalCurrency: "BTC"
     });
 };
+function generate_stock_widget(symbol_csv) {
+    var price_template = $('script#stock_template').html();
+    var url = 'https://query.yahooapis.com/v1/public/yql';
+    var data = encodeURIComponent("select * from yahoo.finance.quotes where symbol in ('" + symbol_csv + "')");
+    $.getJSON(url, 'q=' + data + "&format=json&diagnostics=true&env=http://datatables.org/alltables.env").done(function (data) {
+        var compiled_template = _.template(price_template);
+        var template_data = compiled_template({results: data.query.results.quote});
+        $("div#stock_data_anchor").append(template_data);
+
+        bitcoin_price();
+    }).fail(function (jqxhr, textStatus, error) {
+        var err = textStatus + ", " + error;
+        console.log('Request failed: ' + err);
+    });
+}
 
 $(function(){
     gridster = $(".gridster > ul").gridster({
         widget_margins: [2, 2],
         widget_base_dimensions: [450, 250],
-        max_cols: 10,
+        //max_cols: 10,
         extra_rows: 1,
         draggable: {
             handle: 'header'
@@ -149,28 +164,13 @@ $(function(){
     var widgets = [
         ["<li>"+header_html+'<div id="stock_data_anchor"></div>'+"</li>", 1, 1],
         ["<li>"+header_html+scout_cal_html+"</li>", 1, 1],
-        ["<li>"+header_html+bitcoin_html+"</li>", 1, 1],
+        //["<li>"+header_html+bitcoin_html+"</li>", 1, 1],
         ["<li>"+header_html+gmail_html+"</li>", 2, 1]
     ];
     $.each(widgets, function(i, widget){
         gridster.add_widget.apply(gridster, widget)
     });
 
-    var price_template = $('script#stock_template').html();
     var symbols = ['IBM',"BAC","AIZ","UHAL","AEG"];
-
-    function get_data(symbol_csv) {
-        var url = 'https://query.yahooapis.com/v1/public/yql';
-        var data = encodeURIComponent("select * from yahoo.finance.quotes where symbol in ('" + symbol_csv + "')");
-        $.getJSON(url, 'q=' + data + "&format=json&diagnostics=true&env=http://datatables.org/alltables.env").done(function (data) {
-            var compiled_template = _.template(price_template);
-            var template_data = compiled_template({results: data.query.results.quote});
-            $("div#stock_data_anchor").append(template_data);
-        }).fail(function (jqxhr, textStatus, error) {
-            var err = textStatus + ", " + error;
-            console.log('Request failed: ' + err);
-        });
-    };
-    get_data(symbols);
-    bitcoin_price();
+    generate_stock_widget(symbols);
 });
