@@ -150,7 +150,7 @@ $(function(){
         ["<li>"+header_html+'<div id="stock_data_anchor"></div>'+"</li>", 1, 1],
         ["<li>"+header_html+scout_cal_html+"</li>", 1, 1],
         ["<li>"+header_html+bitcoin_html+"</li>", 1, 1],
-        ["<li>"+header_html+gmail_html+"</li>", 1, 1]
+        ["<li>"+header_html+gmail_html+"</li>", 2, 2]
     ];
     $.each(widgets, function(i, widget){
         gridster.add_widget.apply(gridster, widget)
