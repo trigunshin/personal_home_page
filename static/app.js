@@ -46,19 +46,24 @@ function handleAuthClick(event) {
 
 function post_gmail_auth(widget_data, user_id, result, err) {
     if(err) return console.log('Error: ' + err.message);
+
     var widget_num = widget_data.widget_num;
+    var result_size = 0;
+    if(result) result_size = result.resultSizeEstimate;
+    var result_messages = [];
+    if(result) result_size = result.messages;
 
     var gmail_template = $('script#gmail_template').html();
     var compiled_template = _.template(gmail_template);
     var data = {
-        count: result.resultSizeEstimate,
+        count: result_size,
         widget_num: widget_num
     };
 
     var template_data = compiled_template({data: data});
     $("div#gmail_data_anchor_"+widget_num).append(template_data);
 
-    _.each(result.messages, function(msg) {
+    _.each(result_messages, function(msg) {
         fetch_gmail_email(user_id, msg.id, function(mail, err) {
             if(err) return console.log('Error: ' + err.message);
             $('#gmail_table_data_anchor_' + widget_num).append("<tr><td>"+mail.subject+"</td></tr>");
