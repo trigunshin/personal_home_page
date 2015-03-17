@@ -84,8 +84,6 @@ function fetch_gmail_email(user_id, id, cb) {
         cb(null, reason.result.error);
     });
 }
-fetch_gmail_email('trigunshin@gmail.com', '14bd74ebe21dfca6', function(val, err){console.log(val, err)});
-
 
 ////////// end gmail
 
