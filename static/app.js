@@ -3,8 +3,10 @@ var scout_cal_html = '<iframe src="https://www.google.com/calendar/embed?title=s
 var header_html = "<header>|||</header>";
 var bitcoin_html = '<div>USD/BTC price: <span data-btc-price="1.0">1.0 BTC</span></div>';
 
+
 //function gmail_auth() {
     var clientId = '155830396465-td1o0sadjfr0mcg5ppl4jfb6tovqbl4d.apps.googleusercontent.com';
+
     var apiKey = 'AIzaSyBejn8hBTZsVJBYVcBNZUjqV8vvCDaOFVU';
     //var scopes = "// https://mail.google.com/ https://www.googleapis.com/auth/gmail.modify  https://www.googleapis.com/auth/gmail.readonly";
     var scopes = 'https://www.googleapis.com/auth/plus.me';
@@ -20,7 +22,7 @@ var bitcoin_html = '<div>USD/BTC price: <span data-btc-price="1.0">1.0 BTC</span
     }
 
     function handleAuthResult(authResult) {
-        console.log(authResult);
+        console.log('auth result', authResult);
         var authorizeButton = document.getElementById('authorize-button');
         if (authResult && !authResult.error) {
             authorizeButton.style.visibility = 'hidden';
