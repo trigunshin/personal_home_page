@@ -2,71 +2,92 @@ var gridster;
 var scout_cal_html = '<iframe src="https://www.google.com/calendar/embed?title=scout%20calendar&amp;showTitle=0&amp;showPrint=0&amp;showTabs=0&amp;mode=WEEK&amp;height=250&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=pcrane%40goscoutgo.com&amp;color=%23B1440E&amp;src=talentdrive.com_f6tpmp29u1k06fm90jio0p0r40%40group.calendar.google.com&amp;color=%23333333&amp;ctz=America%2FNew_York" style=" border-width:0 " width="600" height="250" frameborder="0" scrolling="no"></iframe>';
 var header_html = "<header>|||</header>";
 var bitcoin_html = '<div>USD/BTC price: <span data-btc-price="1.0">1.0 BTC</span></div>';
+var gmail_html = '<div id="gmail_content"><button id="authorize-button" style="visibility: hidden">Authorize</button><div id="content"></div></div>';
 
+var clientId = '155830396465-td1o0sadjfr0mcg5ppl4jfb6tovqbl4d.apps.googleusercontent.com';
+var apiKey = 'AIzaSyBejn8hBTZsVJBYVcBNZUjqV8vvCDaOFVU';
+var scopes = "https://mail.google.com/ https://www.googleapis.com/auth/gmail.modify  https://www.googleapis.com/auth/gmail.readonly";
 
-//function gmail_auth() {
-    var clientId = '155830396465-td1o0sadjfr0mcg5ppl4jfb6tovqbl4d.apps.googleusercontent.com';
+function handleClientLoad() {
+    // Step 2: Reference the API key
+    gapi.client.setApiKey(apiKey);
+    window.setTimeout(checkAuth,1);
+}
 
-    var apiKey = 'AIzaSyBejn8hBTZsVJBYVcBNZUjqV8vvCDaOFVU';
-    var scopes = "https://mail.google.com/ https://www.googleapis.com/auth/gmail.modify  https://www.googleapis.com/auth/gmail.readonly";
-    //var scopes = 'https://www.googleapis.com/auth/plus.me';
+function checkAuth() {
+    gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, handleAuthResult);
+}
 
-    function handleClientLoad() {
-        // Step 2: Reference the API key
-        gapi.client.setApiKey(apiKey);
-        window.setTimeout(checkAuth,1);
+function handleAuthResult(authResult) {
+    var user_id = "trigunshin@gmail.com";
+    var authorizeButton = document.getElementById('authorize-button');
+    if (authResult && !authResult.error) {
+        authorizeButton.style.visibility = 'hidden';
+        fetch_unread_email_data(user_id, post_gmail_auth);
+    } else {
+        authorizeButton.style.visibility = '';
+        authorizeButton.onclick = handleAuthClick;
     }
+}
 
-    function checkAuth() {
-        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, handleAuthResult);
-    }
+function handleAuthClick(event) {
+    // Step 3: get authorization to use private data
+    gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, handleAuthResult);
+    return false;
+}
 
-    function handleAuthResult(authResult) {
-        console.log('auth result', authResult);
-        var authorizeButton = document.getElementById('authorize-button');
-        if (authResult && !authResult.error) {
-            authorizeButton.style.visibility = 'hidden';
-            makeApiCall();
-        } else {
-            authorizeButton.style.visibility = '';
-            authorizeButton.onclick = handleAuthClick;
-        }
-    }
+function post_gmail_auth(user_id, result, err) {
+    if(err) return console.log('Error: ' + error.message);
 
-    function handleAuthClick(event) {
-        // Step 3: get authorization to use private data
-        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, handleAuthResult);
-        return false;
-    }
+    $('#content').empty();
+    $('#content').append("unread messages:" + result.resultSizeEstimate);
 
-    // Load the API and make an API call.  Display the results on the screen.
-    function makeApiCall() {
-        // Step 4: Load the gmail API
-        gapi.client.load('gmail', 'v1').then(function() {
-            // Step 5: Assemble the API request
-            var request = gapi.client.gmail.users.get({
-                'userId': 'trigunshin@gmail.com',
-                'includeSpamTrash': false,
-                'q': 'label:unread label:inbox'
-            });
-        // Step 6: Execute the API request
-        request.then(function(resp) {
-            console.log('resp:', resp);
-            var heading = document.createElement('h4');
-            var image = document.createElement('img');
-            image.src = resp.result.image.url;
-            heading.appendChild(image);
-            heading.appendChild(document.createTextNode(resp.result.displayName));
+    _.each(result.messages, function(msg) {
+        fetch_gmail_email(user_id, msg.id, function(mail, err) {
+            if(err) return console.log('Error: ' + error.message);
+            $('#content').append(mail.subject);
+        })
+    });
+}
 
-            document.getElementById('content').appendChild(heading);
-        }, function(reason) {
-                  console.log('Error: ' + reason.result.error.message);
-            });
+// Load the API and make an API call.  Display the results on the screen.
+function fetch_unread_email_data(user_id, cb) {
+    gapi.client.load('gmail', 'v1').then(function() {
+        var request = gapi.client.gmail.users.messages.list({
+            'userId': user_id,
+            'includeSpamTrash': false,
+            'q': 'label:unread label:inbox'
         });
-    }
+        request.then(function(resp) {
+            var result = resp.result;
+            cb(user_id, result, null);
+        }, function(reason) {
+            cb(user_id, null, reason.result.error);
+        });
+    });
+}
 
-//}
+function fetch_gmail_email(user_id, id, cb) {
+    var request = gapi.client.gmail.users.messages.get({
+        'id': id,
+        'userId': user_id,
+    });
+    // Step 6: Execute the API request
+    request.then(function(resp) {
+        var result = resp.result;
+        var mail_info = {};
+        _.each(result.payload.headers, function(hdr) {
+            mail_info[hdr.name.toLowerCase()] = hdr.value;
+        });
+        cb(mail_info, null);
+    }, function(reason) {
+        cb(null, reason.result.error);
+    });
+}
+fetch_gmail_email('trigunshin@gmail.com', '14bd74ebe21dfca6', function(val, err){console.log(val, err)});
 
+
+////////// end gmail
 
 function bitcoin_price() {
     bitcoinprices.init({
@@ -124,7 +145,8 @@ $(function(){
     var widgets = [
         ["<li>"+header_html+'<div id="stock_data_anchor"></div>'+"</li>", 1, 1],
         ["<li>"+header_html+scout_cal_html+"</li>", 1, 1],
-        ["<li>"+header_html+bitcoin_html+"</li>", 1, 1]
+        ["<li>"+header_html+bitcoin_html+"</li>", 1, 1],
+        ["<li>"+header_html+gmail+"</li>", 1, 1]
     ];
     $.each(widgets, function(i, widget){
         gridster.add_widget.apply(gridster, widget)
@@ -148,4 +170,3 @@ $(function(){
     get_data(symbols);
     bitcoin_price();
 });
-// GET https://www.googleapis.com/gmail/v1/users/trigunshin%40gmail.com/messages?includeSpamTrash=false&maxResults=20&q=label%3Aunread+label%3Ainbox&key={YOUR_API_KEY}
