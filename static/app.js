@@ -52,7 +52,7 @@ function post_gmail_auth(user_id, result, err) {
     _.each(result.messages, function(msg) {
         fetch_gmail_email(user_id, msg.id, function(mail, err) {
             if(err) return console.log('Error: ' + err.message);
-            $('#gmail_data_anchor').append("<tr><td>"+mail.subject+"</td></tr>");
+            $('#gmail_table_data_anchor').append("<tr><td>"+mail.subject+"</td></tr>");
         })
     });
 }
