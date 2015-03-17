@@ -41,14 +41,16 @@ function handleAuthClick(event) {
     return false;
 }
 
-function post_gmail_auth(widget_data, user_id, result, err) {
+function post_gmail_auth(widget_data, result, err) {
     if(err) return console.log('Error: ' + err.message);
 
     var widget_num = widget_data.widget_num;
+    var user_id = widget_data.user_id;
+    console.log('result', result);
     var result_size = 0;
     if(result) result_size = result.resultSizeEstimate;
     var result_messages = [];
-    if(result) result_size = result.messages;
+    if(result) result_messages = result.messages;
 
     var gmail_template = $('script#gmail_template').html();
     var compiled_template = _.template(gmail_template);
@@ -68,7 +70,6 @@ function post_gmail_auth(widget_data, user_id, result, err) {
     });
 }
 
-// Load the API and make an API call.  Display the results on the screen.
 function fetch_unread_email_data(widget_data, cb) {
     gapi.client.load('gmail', 'v1').then(function() {
         var request = gapi.client.gmail.users.messages.list({
