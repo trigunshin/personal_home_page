@@ -4,12 +4,9 @@ var stock_data_html = '<div id="stock_data_anchor"></div>';
 var gmail_html = '<div id="gmail_content"><button id="authorize-button" style="visibility: hidden">Authorize</button><div id="gmail_data_anchor"></div></div>';
 
 var clientId = '155830396465-td1o0sadjfr0mcg5ppl4jfb6tovqbl4d.apps.googleusercontent.com';
-var apiKey = 'AIzaSyBejn8hBTZsVJBYVcBNZUjqV8vvCDaOFVU';
 var scopes = "https://mail.google.com/ https://www.googleapis.com/auth/gmail.modify  https://www.googleapis.com/auth/gmail.readonly";
 
 function handleClientLoad() {
-    // Step 2: Reference the API key
-    gapi.client.setApiKey(apiKey);
     window.setTimeout(checkAuth,1);
 }
 
