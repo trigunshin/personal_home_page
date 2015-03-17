@@ -43,7 +43,7 @@ function post_gmail_auth(user_id, result, err) {
     var compiled_template = _.template(gmail_template);
     var data = {count: resultSizeEstimate};
 
-    var template_data = compiled_template({data: data);
+    var template_data = compiled_template({data: data});
     $("div#gmail_data_anchor").append(template_data);
 
     //$('#content').empty();
