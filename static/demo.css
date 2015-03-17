@@ -5,6 +5,7 @@
 
 .gridster ul {
   list-style-type: none;
+  overflow: auto;
 }
 
 /*/
@@ -27,6 +28,7 @@
     font-size: 1em;
     font-weight: bold;
     line-height: 100%;
+    white-space: nowrap;
 }
 
 
