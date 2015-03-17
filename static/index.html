@@ -14,6 +14,20 @@
 	</div>
 </body>
 <!-- script section -->
+<script id="gmail_template" type="text/plain">
+<div id="results">
+	<div id='unread_count'>Unread: <%= data.count %></div>
+    <table class="table table-condensed">
+		<thead>
+			<tr>
+				<th data-field="subject">Subject</th>
+			</tr>
+		</thead>
+		<tbody id="gmail_data_anchor">
+        </tbody>
+    </table>
+</div>
+</script>
 <script id="stock_template" type="text/plain">
 <div id="results">
     <table class="table table-condensed">

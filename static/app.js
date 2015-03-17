@@ -2,7 +2,7 @@ var gridster;
 var scout_cal_html = '<iframe src="https://www.google.com/calendar/embed?title=scout%20calendar&amp;showTitle=0&amp;showPrint=0&amp;showTabs=0&amp;mode=WEEK&amp;height=250&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=pcrane%40goscoutgo.com&amp;color=%23B1440E&amp;src=talentdrive.com_f6tpmp29u1k06fm90jio0p0r40%40group.calendar.google.com&amp;color=%23333333&amp;ctz=America%2FNew_York" style=" border-width:0 " width="600" height="250" frameborder="0" scrolling="no"></iframe>';
 var header_html = "<header>|||</header>";
 var bitcoin_html = '<div>USD/BTC price: <span data-btc-price="1.0">1.0 BTC</span></div>';
-var gmail_html = '<div id="gmail_content"><button id="authorize-button" style="visibility: hidden">Authorize</button><div id="content"></div></div>';
+var gmail_html = '<div id="gmail_content"><button id="authorize-button" style="visibility: hidden">Authorize</button><div id="gmail_data_anchor"></div></div>';
 
 var clientId = '155830396465-td1o0sadjfr0mcg5ppl4jfb6tovqbl4d.apps.googleusercontent.com';
 var apiKey = 'AIzaSyBejn8hBTZsVJBYVcBNZUjqV8vvCDaOFVU';
@@ -39,13 +39,20 @@ function handleAuthClick(event) {
 function post_gmail_auth(user_id, result, err) {
     if(err) return console.log('Error: ' + error.message);
 
-    $('#content').empty();
-    $('#content').append("unread messages:" + result.resultSizeEstimate);
+    var gmail_template = $('script#gmail_template').html();
+    var compiled_template = _.template(gmail_template);
+    var data = {count: resultSizeEstimate};
+
+    var template_data = compiled_template({data: data);
+    $("div#gmail_data_anchor").append(template_data);
+
+    //$('#content').empty();
+    //$('#content').append("unread messages:" + result.resultSizeEstimate);
 
     _.each(result.messages, function(msg) {
         fetch_gmail_email(user_id, msg.id, function(mail, err) {
             if(err) return console.log('Error: ' + error.message);
-            $('#content').append(mail.subject);
+            $('#gmail_data_anchor').append("<tr><td>"+mail.subject+"</td></tr>");
         })
     });
 }
