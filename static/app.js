@@ -8,8 +8,8 @@ var bitcoin_html = '<div>USD/BTC price: <span data-btc-price="1.0">1.0 BTC</span
     var clientId = '155830396465-td1o0sadjfr0mcg5ppl4jfb6tovqbl4d.apps.googleusercontent.com';
 
     var apiKey = 'AIzaSyBejn8hBTZsVJBYVcBNZUjqV8vvCDaOFVU';
-    //var scopes = "// https://mail.google.com/ https://www.googleapis.com/auth/gmail.modify  https://www.googleapis.com/auth/gmail.readonly";
-    var scopes = 'https://www.googleapis.com/auth/plus.me';
+    var scopes = "https://mail.google.com/ https://www.googleapis.com/auth/gmail.modify  https://www.googleapis.com/auth/gmail.readonly";
+    //var scopes = 'https://www.googleapis.com/auth/plus.me';
 
     function handleClientLoad() {
         // Step 2: Reference the API key
@@ -41,14 +41,17 @@ var bitcoin_html = '<div>USD/BTC price: <span data-btc-price="1.0">1.0 BTC</span
 
     // Load the API and make an API call.  Display the results on the screen.
     function makeApiCall() {
-        // Step 4: Load the Google+ API
-        gapi.client.load('plus', 'v1').then(function() {
+        // Step 4: Load the gmail API
+        gapi.client.load('gmail', 'v1').then(function() {
             // Step 5: Assemble the API request
-            var request = gapi.client.plus.people.get({
-                'userId': 'me'
+            var request = gapi.client.gmail.users.get({
+                'userId': 'trigunshin@gmail.com',
+                'includeSpamTrash': false,
+                'q': 'label:unread label:inbox'
             });
         // Step 6: Execute the API request
         request.then(function(resp) {
+            console.log('resp:', resp);
             var heading = document.createElement('h4');
             var image = document.createElement('img');
             image.src = resp.result.image.url;
