@@ -9,9 +9,6 @@ var gmail_widgets = [
     {
         user_id: "trigunshin@gmail.com",
         widget_num: 1
-    }, {
-        user_id: 'pcrane@goscoutgo.com',
-        widget_num: 2
     }
 ];
 
