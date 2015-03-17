@@ -3,6 +3,66 @@ var scout_cal_html = '<iframe src="https://www.google.com/calendar/embed?title=s
 var header_html = "<header>|||</header>";
 var bitcoin_html = '<div>USD/BTC price: <span data-btc-price="1.0">1.0 BTC</span></div>';
 
+//function gmail_auth() {
+    var clientId = '155830396465-td1o0sadjfr0mcg5ppl4jfb6tovqbl4d.apps.googleusercontent.com';
+    var apiKey = 'AIzaSyBejn8hBTZsVJBYVcBNZUjqV8vvCDaOFVU';
+    //var scopes = "// https://mail.google.com/ https://www.googleapis.com/auth/gmail.modify  https://www.googleapis.com/auth/gmail.readonly";
+    var scopes = 'https://www.googleapis.com/auth/plus.me';
+
+    function handleClientLoad() {
+        // Step 2: Reference the API key
+        gapi.client.setApiKey(apiKey);
+        window.setTimeout(checkAuth,1);
+    }
+
+    function checkAuth() {
+        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, handleAuthResult);
+    }
+
+    function handleAuthResult(authResult) {
+        console.log(authResult);
+        var authorizeButton = document.getElementById('authorize-button');
+        if (authResult && !authResult.error) {
+            authorizeButton.style.visibility = 'hidden';
+            makeApiCall();
+        } else {
+            authorizeButton.style.visibility = '';
+            authorizeButton.onclick = handleAuthClick;
+        }
+    }
+
+    function handleAuthClick(event) {
+        // Step 3: get authorization to use private data
+        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, handleAuthResult);
+        return false;
+    }
+
+    // Load the API and make an API call.  Display the results on the screen.
+    function makeApiCall() {
+        // Step 4: Load the Google+ API
+        gapi.client.load('plus', 'v1').then(function() {
+            // Step 5: Assemble the API request
+            var request = gapi.client.plus.people.get({
+                'userId': 'me'
+            });
+        // Step 6: Execute the API request
+        request.then(function(resp) {
+            var heading = document.createElement('h4');
+            var image = document.createElement('img');
+            image.src = resp.result.image.url;
+            heading.appendChild(image);
+            heading.appendChild(document.createTextNode(resp.result.displayName));
+
+            document.getElementById('content').appendChild(heading);
+        }, function(reason) {
+                  console.log('Error: ' + reason.result.error.message);
+            });
+        });
+    }
+
+//}
+
+
 function bitcoin_price() {
     bitcoinprices.init({
         // Where we get bitcoinaverage data
@@ -83,3 +143,4 @@ $(function(){
     get_data(symbols);
     bitcoin_price();
 });
+// GET https://www.googleapis.com/gmail/v1/users/trigunshin%40gmail.com/messages?includeSpamTrash=false&maxResults=20&q=label%3Aunread+label%3Ainbox&key={YOUR_API_KEY}

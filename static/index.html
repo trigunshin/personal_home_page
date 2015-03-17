@@ -9,6 +9,9 @@
 	<link href="jquery.gridster.css" rel="stylesheet">
 </head>
 <body>
+	<div>
+	    <button id="authorize-button" style="visibility: hidden">Authorize</button>
+	</div>
 	<div class="gridster container">
 	    <ul></ul>
 	</div>
@@ -40,8 +43,8 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script src="gridster.js"></script>
 <!-- widget requirements -->
-<script src="https://apis.google.com/js/client.js"></script>
 <script src="bitcoinprices.js"></script>
 <!-- app files -->
 <script src="app.js"></script>
+<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
 </html>
