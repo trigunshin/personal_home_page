@@ -1,7 +1,6 @@
 var gridster;
 var scout_cal_html = '<iframe src="https://www.google.com/calendar/embed?title=scout%20calendar&amp;showTitle=0&amp;showPrint=0&amp;showTabs=0&amp;mode=WEEK&amp;height=250&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=pcrane%40goscoutgo.com&amp;color=%23B1440E&amp;src=talentdrive.com_f6tpmp29u1k06fm90jio0p0r40%40group.calendar.google.com&amp;color=%23333333&amp;ctz=America%2FNew_York" style=" border-width:0 " width="450" height="220" frameborder="0" scrolling="no"></iframe>';
-var header_html = "<header>|||</header>";
-var bitcoin_html = '<div>USD/BTC price: <span data-btc-price="1.0">1.0 BTC</span></div>';
+var stock_data_html = '<div id="stock_data_anchor"></div>';
 var gmail_html = '<div id="gmail_content"><button id="authorize-button" style="visibility: hidden">Authorize</button><div id="gmail_data_anchor"></div></div>';
 
 var clientId = '155830396465-td1o0sadjfr0mcg5ppl4jfb6tovqbl4d.apps.googleusercontent.com';
@@ -149,7 +148,12 @@ function generate_stock_widget(symbol_csv) {
         console.log('Request failed: ' + err);
     });
 }
-
+function wrap_with_header(title, html) {
+    return "<header>"+title+"</header>"+html;
+}
+function wrap_with_li(html) {
+    return "<li>" + html + "</li>";
+}
 $(function(){
     gridster = $(".gridster > ul").gridster({
         widget_margins: [2, 2],
@@ -162,10 +166,9 @@ $(function(){
     }).data('gridster');
 
     var widgets = [
-        ["<li>"+header_html+'<div id="stock_data_anchor"></div>'+"</li>", 1, 1],
-        ["<li>"+header_html+scout_cal_html+"</li>", 1, 1],
-        //["<li>"+header_html+bitcoin_html+"</li>", 1, 1],
-        ["<li>"+header_html+gmail_html+"</li>", 2, 1]
+        [wrap_with_li(wrap_with_header("Ticker Data", stock_data_html)), 1, 1],
+        [wrap_with_li(wrap_with_header("Scout Calendar", scout_cal_html)), 1, 1],
+        [wrap_with_li(wrap_with_header("Gmail", gmail_html)), 2, 1]
     ];
     $.each(widgets, function(i, widget){
         gridster.add_widget.apply(gridster, widget)
