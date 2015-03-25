@@ -190,13 +190,12 @@ $(function(){
         }
     }).data('gridster');
 
-    var widgets = [
-        [wrap_with_li(wrap_with_header("Ticker Data", stock_widget_html)), 1, 2],
-        [wrap_with_li(wrap_with_header("Scout Calendar", scout_cal_html)), 1, 1]
-    ];
+    var widgets = [];
     _.each(gmail_widgets, function(gmail_widget) {
         widgets.push(get_gmail_widget(gmail_widget));
     })
+    widgets.push([wrap_with_li(wrap_with_header("Ticker Data", stock_widget_html)), 1, 2]);
+    widgets.push([wrap_with_li(wrap_with_header("Scout Calendar", scout_cal_html)), 1, 1]);
     $.each(widgets, function(i, widget){
         gridster.add_widget.apply(gridster, widget)
     });
