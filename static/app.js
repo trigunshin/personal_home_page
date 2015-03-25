@@ -201,6 +201,6 @@ $(function(){
         gridster.add_widget.apply(gridster, widget)
     });
 
-    var symbols = ['IBM',"BAC","AIZ","UHAL","AEG"];
+    var symbols = ['IBM',"BAC","AIZ","UHAL","AEG","LL","LUKOY","XOM","KRFT"];
     generate_stock_widget(symbols);
 });
