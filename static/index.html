@@ -4,12 +4,12 @@
 	<meta charset="utf-8">
 
 	<title> iG</title>
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<link href="demo.css" rel="stylesheet">
-	<link href="jquery.gridster.css" rel="stylesheet">
+<link href="jquery.gridster.css" rel="stylesheet">
 </head>
 <body>
-	<div class="gridster container">
+	<div id='gridster_container' class="gridster container">
 	    <ul></ul>
 	</div>
 </body>
@@ -35,6 +35,7 @@
 			<tr>
 				<th data-field="id">Symbol</th>
 				<th data-field="price">Last Price</th>
+				<th data-field="percent_change">% Change</th>
 			</tr>
 		</thead>
 		<tbody id="stock_data_anchor">
@@ -43,9 +44,10 @@
 	            <td><span data-btc-price="1.0">1.0 BTC</span></td>
 	        </tr>
 	        <% _.each(results, function(result) { %>
-	        <tr>
+	        <tr class="<%= result.PercentChange[0].indexOf('-') >= 0 ? 'danger' : 'success' %>">
 	            <td><%= result.Symbol %></td>
 	            <td><%= result.LastTradePriceOnly %></td>
+	            <td><%= result.PercentChange %></td>
 	        </tr>
 	        <% }); %>
         </tbody>
@@ -55,8 +57,9 @@
 <!-- base scaffolding -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="gridster.js"></script>
+<script src="gridster-bootstrap.min.js"></script>
 <!-- widget requirements -->
 <script src="bitcoinprices.js"></script>
 <!-- app files -->
