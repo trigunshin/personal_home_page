@@ -154,7 +154,11 @@ function generate_stock_widget(symbol_csv) {
     var data = encodeURIComponent("select * from yahoo.finance.quotes where symbol in ('" + symbol_csv + "')");
     $.getJSON(url, 'q=' + data + "&format=json&diagnostics=true&env=http://datatables.org/alltables.env").done(function (data) {
         var compiled_template = _.template(price_template);
-        var template_data = compiled_template({results: data.query.results.quote});
+        var sorted_results = _.sortBy(data.query.results.quote, function(result) {
+            //return -1 * parseFloat(result.PercentChange);
+            return result.PercentChange.substring(1);
+        });
+        var template_data = compiled_template({results: sorted_results.reverse()});
         $("div#stock_data_anchor").append(template_data);
 
         bitcoin_price();
