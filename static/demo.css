@@ -25,7 +25,7 @@
 
 .gridster li {
     font-size: 1em;
-    font-weight: bold;
+    /*font-weight: bold;*/
     line-height: 100%;
     overflow: auto;
     white-space: nowrap;
