@@ -74,13 +74,13 @@ function fill_email_widget(email, num) {
         var gmail_template = $('script#gmail_template').html();
         var compiled_template = _.template(gmail_template);
         var data = {
-            count: result_size,
-            widget_num: widget_num,
+            count: email_data.emails.length,
+            widget_num: num,
             emails: email_data.emails
         };
 
         var template_data = compiled_template({data: data});
-        $("div#gmail_data_anchor_"+widget_num).append(template_data);
+        $("div#gmail_data_anchor_"+num).append(template_data);
     });
 }
 function init_email_widget(email, num) {
@@ -97,7 +97,7 @@ function init_email_widget(email, num) {
 function create_email_widgets(cb) {
     $.get("/api/imap/list", function(data) {
         var widget_templates = _.map(data.emails, init_email_widget);
-        return cb(widget_templates, null);
+        return cb(null, widget_templates, data.emails);
     });
 }
 
@@ -112,7 +112,7 @@ $(function first_render(){
         }
     }).data('gridster');
 
-    create_email_widgets(function(email_widgets, err) {
+    create_email_widgets(function(err, email_widgets, emails) {
         if (err) {
             $('body').append(JSON.stringify(err));
             return console.log(err);
@@ -127,6 +127,6 @@ $(function first_render(){
 
         var symbols = ['IBM',"BAC","AIZ","UHAL","AEG","LL","LUKOY","XOM","KRFT"];
         generate_stock_widget(symbols);
-        _.each(email_widgets, fill_email_widget);
+        _.each(emails, fill_email_widget);
     });
 });
