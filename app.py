@@ -53,7 +53,7 @@ def _fetch_mail(username, password, email_headers):
 
     email_uids = data[0].split(' ')
     try:
-        email_data = [_get_email_data(mail, uid, email_headers) for uid in email_uids]
+        email_data = [_get_email_data(mail, uid, email_headers) for uid in email_uids if not uid == '']
     finally:
         mail.close()
         mail.logout()
