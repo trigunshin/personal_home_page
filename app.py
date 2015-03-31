@@ -1,7 +1,7 @@
 import email, imaplib
 from config import settings
 from dateutil import parser
-from flask import Flask, redirect, render_template
+from flask import Flask, jsonify, redirect, render_template
 from jinja2 import Markup
 from os import getenv
 
@@ -10,10 +10,11 @@ app = Flask(__name__)
 pair_delimiter = '|_|'
 pwd_delimiter = '||'
 email_data_string = settings.EMAILS
+email_dict = {}
 if email_data_string:
     results = [pair.split('||') for pair in email_data_string.split('|_|')]
-else:
-    results = []
+    for addr, passw in results:
+        email_dict[addr] = passw
 
 email_headers = ['Subject', 'Date']
 
@@ -52,18 +53,26 @@ def _fetch_mail(username, password, email_headers):
         return None
 
     email_uids = data[0].split(' ')
-    email_data = [_get_email_data(mail, uid, email_headers) for uid in email_uids]
-    # latest_email_uid = email_uids[-1]
-
-    mail.close()
-    mail.logout()
+    try:
+        email_data = [_get_email_data(mail, uid, email_headers) for uid in email_uids]
+    finally:
+        mail.close()
+        mail.logout()
 
     return email_data
 
 
-@app.route('/gmail/imap')
-def get_mail():
-    pass
+@app.route('/api/imap/<addr>')
+def get_mail(addr):
+    passw = email_dict.get(addr, False)
+    ret = []
+    if passw:
+        ret = _fetch_mail(addr, passw, email_headers)
+    return jsonify(emails=ret)
+
+@app.route('/api/imap/list')
+def get_addresses():
+    return jsonify(emails=email_dict.keys())
 
 @app.route('/')
 def hello_world():
