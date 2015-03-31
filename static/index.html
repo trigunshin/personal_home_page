@@ -24,6 +24,11 @@
 			</tr>
 		</thead>
 		<tbody id="gmail_table_data_anchor_<%= data.widget_num %>">
+		<% _.each(emails, function(email) { %>
+			<tr>
+				<td><%= email.subject %></td>
+			</tr>
+		<% }); %>
         </tbody>
     </table>
 </div>
@@ -59,10 +64,8 @@
 <script src="underscore-min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="gridster.js"></script>
-<script src="gridster-bootstrap.min.js"></script>
 <!-- widget requirements -->
 <script src="bitcoinprices.js"></script>
 <!-- app files -->
 <script src="app.js"></script>
-<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
 </html>
