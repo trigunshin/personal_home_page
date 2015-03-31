@@ -29,7 +29,6 @@ def _get_email_data(client, uid, email_headers):
      # for parsing "Yuji Tomita" <yuji@grovemade.com>
     ret['from'] = email.utils.parseaddr(email_message['From'])
 
-    ret['headers'] = {}
     for key, val in email_message.items():
         if key in email_headers:
             if key == 'Date':
