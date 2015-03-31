@@ -33,9 +33,9 @@ def _get_email_data(client, uid, email_headers):
     for key, val in email_message.items():
         if key in email_headers:
             if key == 'Date':
-                ret[key] = parser.parse(val)
+                ret[key.lower()] = parser.parse(val)
             else:
-                ret[key] = val
+                ret[key.lower()] = val
 
     # re-mark unread
     client.uid('STORE', uid, '-FLAGS', '\SEEN')
