@@ -1,5 +1,5 @@
 var gridster;
-var scout_cal_html = '<iframe src="https://www.google.com/calendar/embed?showTitle=0&showPrint=0&showTabs=0&showCalendars=0&mode=WEEK&height=220&wkst=1&bgcolor=#FFFFFF&src=pcrane@goscoutgo.com&color=#B1440E&ctz=America/New_York" style=" border-width:0 " width="450" height="220" frameborder="0" scrolling="no"></iframe>';
+var scout_cal_html = '<iframe src="https://www.google.com/calendar/embed?showTitle=0&amp;showPrint=0&amp;showTz=0&amp;mode=WEEK&amp;height=220&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=pcrane%40goscoutgo.com&amp;color=%23B1440E&amp;ctz=America%2FNew_York" style=" border-width:0 " width="450" height="220" frameborder="0" scrolling="no"></iframe>';
 var stock_widget_html = '<div id="stock_data_anchor"></div>';
 var gmail_widget_html = '<div id="gmail_content"><button id="authorize-button" style="visibility: hidden">Authorize</button><div id="gmail_data_anchor_<%= data.widget_num %>"></div></div>';
 
