@@ -6,6 +6,7 @@ from jinja2 import Markup
 from os import getenv
 
 app = Flask(__name__)
+DEBUG = False if settings.DEBUG == 'prod' else True
 
 pair_delimiter = '|_|'
 pwd_delimiter = '||'
@@ -82,4 +83,4 @@ def hello_app():
     return "hi"
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=DEBUG)
