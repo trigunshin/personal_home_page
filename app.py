@@ -1,12 +1,13 @@
 import email, imaplib
 from config import settings
 from dateutil import parser
-from flask import Flask, jsonify, redirect, render_template
+from flask import Flask, jsonify, redirect, render_template, session
 from jinja2 import Markup
 from os import getenv
 
 app = Flask(__name__)
 DEBUG = False if settings.DEBUG == 'prod' else True
+app.config['SECRET_KEY'] = settings.SECRET
 
 pair_delimiter = '|_|'
 pwd_delimiter = '||'
@@ -64,6 +65,8 @@ def _fetch_mail(username, password, email_headers):
 
 @app.route('/api/imap/<addr>')
 def get_mail(addr):
+    if not session.get('authorized', False):
+        return jsonify(emails=[])
     passw = email_dict.get(addr, False)
     ret = []
     if passw:
@@ -72,7 +75,21 @@ def get_mail(addr):
 
 @app.route('/api/imap/list')
 def get_addresses():
+    if not session.get('authorized', False):
+        return jsonify(emails=[])
     return jsonify(emails=email_dict.keys())
+
+@app.route('/api/auth/login/<password>')
+def login(password):
+    if password == settings.PASSWORD:
+        session['authorized'] = True
+        return 'success'
+    return 'fail', 401
+
+@app.route('/api/auth/logout')
+def logout():
+    session['authorized'] = False
+    return 'success'
 
 @app.route('/')
 def hello_world():
