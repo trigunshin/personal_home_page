@@ -113,6 +113,14 @@ function create_quicklink_widget(qlinks) {
     return [wrap_with_li(wrap_with_header('quicklinks', finished_template)), 1, 1];
 }
 
+function create_stock_widget(widget_html) {
+    return [wrap_with_li(wrap_with_header("Ticker Data", widget_html)), 1, 2];
+}
+
+function create_calendar_widget(widget_html) {
+    return [wrap_with_li(wrap_with_header("Scout Calendar", widget_html)), 1, 1];
+}
+
 $(function first_render(){
     gridster = $(".gridster > ul").gridster({
         widget_margins: [2, 2],
@@ -132,8 +140,8 @@ $(function first_render(){
         // init widgets
         var widgets = email_widgets;
 
-        widgets.push([wrap_with_li(wrap_with_header("Ticker Data", stock_widget_html)), 1, 2]);
-        widgets.push([wrap_with_li(wrap_with_header("Scout Calendar", scout_cal_html)), 1, 1]);
+        widgets.push(create_stock_widget(stock_widget_html));
+        widgets.push(create_calendar_widget(scout_cal_html));
 
         widgets.push(create_quicklink_widget(qlink_data));
 
