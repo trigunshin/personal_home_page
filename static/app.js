@@ -150,7 +150,7 @@ $(function first_render(){
             gridster.add_widget.apply(gridster, widget)
         });
 
-        // fill widgets with dat
+        // fill widgets with data
         var symbols = ['IBM',"BAC","AIZ","UHAL","AEG","LL","LUKOY","XOM","KRFT"];
         generate_stock_widget(symbols);
         _.each(emails, fill_email_widget);
