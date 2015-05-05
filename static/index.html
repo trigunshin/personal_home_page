@@ -14,6 +14,13 @@
 	</div>
 </body>
 <!-- script section -->
+<script id="qlink_template" type="text/plain">
+<div id="results">
+	<% _.each(data.qlinks, function(qlink) { %>
+		<a href="<%= qlink.url %>" target="_blank"><%= qlink.name %></a>
+	<% }); %>
+</div>
+</script>
 <script id="gmail_template" type="text/plain">
 <div id="results">
 	<div id='unread_count'>Unread: <%= data.count %></div>

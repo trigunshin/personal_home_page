@@ -2,6 +2,10 @@ var gridster;
 var scout_cal_html = '<iframe src="https://www.google.com/calendar/embed?showTitle=0&amp;showPrint=0&amp;showTz=0&amp;mode=WEEK&amp;height=220&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=pcrane%40goscoutgo.com&amp;color=%23B1440E&amp;ctz=America%2FNew_York" style=" border-width:0 " width="450" height="220" frameborder="0" scrolling="no"></iframe>';
 var stock_widget_html = '<div id="stock_data_anchor"></div>';
 var gmail_widget_html = '<div id="gmail_content"><button id="authorize-button" style="visibility: hidden">Authorize</button><div id="gmail_data_anchor_<%= data.widget_num %>"></div></div>';
+var qlink_data = {qlinks: [
+    {name: 'cs colorgame', url: 'http://cs-interview-questions.herokuapp.com/static/color_game.html'}
+    //, {name: '', url: ''}
+]};
 
 function bitcoin_price() {
     bitcoinprices.init({
@@ -101,6 +105,14 @@ function create_email_widgets(cb) {
     });
 }
 
+function create_quicklink_widget(qlinks) {
+    var qlink_template = $('script#qlink_template').html();
+    var compiled_template = _.template(qlink_template);
+    var finished_template = compiled_template({data: qlinks});
+
+    return [wrap_with_li(wrap_with_header('quicklinks', finished_template)), 1, 1];
+}
+
 $(function first_render(){
     gridster = $(".gridster > ul").gridster({
         widget_margins: [2, 2],
@@ -117,14 +129,20 @@ $(function first_render(){
             $('body').append(JSON.stringify(err));
             return console.log(err);
         }
+        // init widgets
         var widgets = email_widgets;
 
         widgets.push([wrap_with_li(wrap_with_header("Ticker Data", stock_widget_html)), 1, 2]);
         widgets.push([wrap_with_li(wrap_with_header("Scout Calendar", scout_cal_html)), 1, 1]);
+
+        widgets.push(create_quicklink_widget(qlink_data));
+
+        // add widgets to page
         $.each(widgets, function(i, widget){
             gridster.add_widget.apply(gridster, widget)
         });
 
+        // fill widgets with dat
         var symbols = ['IBM',"BAC","AIZ","UHAL","AEG","LL","LUKOY","XOM","KRFT"];
         generate_stock_widget(symbols);
         _.each(emails, fill_email_widget);
