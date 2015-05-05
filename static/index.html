@@ -1,41 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
+    <meta charset="utf-8">
 
-	<title> iG</title>
-	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link href="demo.css" rel="stylesheet">
-	<link href="jquery.gridster.css" rel="stylesheet">
+    <title> iG</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="demo.css" rel="stylesheet">
+    <link href="jquery.gridster.css" rel="stylesheet">
 </head>
 <body>
-	<div id='gridster_container' class="gridster container">
-	    <ul></ul>
-	</div>
+    <div id='gridster_container' class="gridster container">
+        <ul></ul>
+    </div>
 </body>
 <!-- script section -->
 <script id="qlink_template" type="text/plain">
 <div id="results">
-	<% _.each(data.qlinks, function(qlink) { %>
-		<a href="<%= qlink.url %>" target="_blank"><%= qlink.name %></a>
-	<% }); %>
+    <% _.each(data.qlinks, function(qlink) { %>
+        <a href="<%= qlink.url %>" target="_blank"><%= qlink.name %></a>
+    <% }); %>
 </div>
 </script>
 <script id="gmail_template" type="text/plain">
 <div id="results">
-	<div id='unread_count'>Unread: <%= data.count %></div>
+    <div id='unread_count'>Unread: <%= data.count %></div>
     <table class="table table-condensed table-striped">
-		<thead>
-			<tr>
-				<th data-field="subject">Subject</th>
-			</tr>
-		</thead>
-		<tbody id="gmail_table_data_anchor_<%= data.widget_num %>">
-		<% _.each(data.emails, function(email) { %>
-			<tr>
-				<td><%= email.subject %></td>
-			</tr>
-		<% }); %>
+        <thead>
+            <tr>
+                <th data-field="subject">Subject</th>
+            </tr>
+        </thead>
+        <tbody id="gmail_table_data_anchor_<%= data.widget_num %>">
+        <% _.each(data.emails, function(email) { %>
+            <tr>
+                <td><%= email.subject %></td>
+            </tr>
+        <% }); %>
         </tbody>
     </table>
 </div>
@@ -43,25 +43,25 @@
 <script id="stock_template" type="text/plain">
 <div id="results">
     <table class="table table-condensed">
-		<thead>
-			<tr>
-				<th data-field="id">Symbol</th>
-				<th data-field="price">Last Price</th>
-				<th data-field="percent_change">% Change</th>
-			</tr>
-		</thead>
-		<tbody id="stock_data_anchor">
-			<tr>
-	            <td>USD/BTC</td>
-	            <td><span data-btc-price="1.0">1.0 BTC</span></td>
-	        </tr>
-	        <% _.each(results, function(result) { %>
-	        <tr class="<%= result.PercentChange[0].indexOf('-') >= 0 ? 'danger' : 'success' %>">
-	            <td><%= result.Symbol %></td>
-	            <td><%= result.LastTradePriceOnly %></td>
-	            <td><%= result.PercentChange %></td>
-	        </tr>
-	        <% }); %>
+        <thead>
+            <tr>
+                <th data-field="id">Symbol</th>
+                <th data-field="price">Last Price</th>
+                <th data-field="percent_change">% Change</th>
+            </tr>
+        </thead>
+        <tbody id="stock_data_anchor">
+            <tr>
+                <td>USD/BTC</td>
+                <td><span data-btc-price="1.0">1.0 BTC</span></td>
+            </tr>
+            <% _.each(results, function(result) { %>
+            <tr class="<%= result.PercentChange[0].indexOf('-') >= 0 ? 'danger' : 'success' %>">
+                <td><%= result.Symbol %></td>
+                <td><%= result.LastTradePriceOnly %></td>
+                <td><%= result.PercentChange %></td>
+            </tr>
+            <% }); %>
         </tbody>
     </table>
 </div>
