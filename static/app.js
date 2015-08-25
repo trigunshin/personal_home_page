@@ -9,7 +9,8 @@ var qlink_data = {qlinks: [
     {name: 'msn screener', url: 'http://www.msn.com/en-us/money/stockscreener'},
     {name: 'econ reading', url: 'http://www.ssrn.com/en/'},
     {name: 'Free quandl fundamentla api', url: 'https://www.quandl.com/data/SEC'},
-    {name: 'Cheapish quandl api', url: 'https://www.quandl.com/data/SF1'}
+    {name: 'Cheapish quandl api', url: 'https://www.quandl.com/data/SF1'},
+    {name: 'unixmages', url: 'http://unixmages.com/'}
 ]};
 
 function bitcoin_price() {
