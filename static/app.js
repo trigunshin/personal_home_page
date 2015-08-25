@@ -3,8 +3,13 @@ var scout_cal_html = '<iframe src="https://www.google.com/calendar/embed?showTit
 var stock_widget_html = '<div id="stock_data_anchor"></div>';
 var gmail_widget_html = '<div id="gmail_content"><button id="authorize-button" style="visibility: hidden">Authorize</button><div id="gmail_data_anchor_<%= data.widget_num %>"></div></div>';
 var qlink_data = {qlinks: [
-    {name: 'cs colorgame', url: 'http://cs-interview-questions.herokuapp.com/static/color_game.html'}
-    //, {name: '', url: ''}
+    {name: 'cs colorgame', url: 'http://cs-interview-questions.herokuapp.com/static/color_game.html'},
+    {name: 'hn free reads list', url: 'https://news.ycombinator.com/item?id=9611219'},
+    {name: 'zacks screener', url: 'http://www.zacks.com/screening/stock-screener'},
+    {name: 'msn screener', url: 'http://www.msn.com/en-us/money/stockscreener'},
+    {name: 'econ reading', url: 'http://www.ssrn.com/en/'},
+    {name: 'Free quandl fundamentla api', url: 'https://www.quandl.com/data/SEC'},
+    {name: 'Cheapish quandl api', url: 'https://www.quandl.com/data/SF1'}
 ]};
 
 function bitcoin_price() {
