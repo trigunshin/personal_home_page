@@ -100,4 +100,4 @@ def hello_app():
     return "hi"
 
 if __name__ == '__main__':
-    app.run(debug=DEBUG)
+    app.run(port=4999, debug=DEBUG)
